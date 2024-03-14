@@ -1,0 +1,14 @@
+<h1>Grupo Staff</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo staff permite al usuario agregar modificaciones en el directorio <b>/usr/local</b> sin necesidad de tener privilegios de root. Es importante 
+    notar que normalmente <b>/usr/local/bin</b> es un directorio común en la variable PATH, y esto puede llegar a ser muy peligroso. 
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Un atacante podría realizar un ataque de hijacking creando un binario malicioso en el directorio <b>/usr/local/bin</b> con el nombre apropiado para 
+    que, si un usuario con permisos elevados quiere ejecutar un binario de forma relativa, se cargue primero el malicioso. Hay que notar que se podrán "sobreescribir" 
+    los ejecutables presentes en /bin y en /usr/bin.
+</p>

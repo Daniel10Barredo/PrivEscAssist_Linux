@@ -1,0 +1,45 @@
+<h1>Redes y conexiones</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Interfaces</h2>
+<p class="mainComment">Listado de interfaces y configuración de red.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell"></code>(ifconfig || ip a)</pre>
+</div>
+<!-- Code-->
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Puertos</h2>
+<p class="mainComment">Enumeración de puertos abiertos.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(netstat -punta || ss --ntpu)</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Script para escanear puertos en la red interna.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for ((port=1; port<=1024; port++)); do
+    (echo >/dev/tcp/10.10.10.1/$port) >/dev/null 2>&1 && echo "TCP port $port is open"
+done</code></pre></div>
+<!-- Code-->
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Enrutamiento</h2>
+<p class="mainComment">Listado de la tabla de enrutamiento.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(route || ip n)</code></pre>
+</div>
+<!-- Code-->
+
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>ARP</h2>
+<p class="mainComment">Listado de la tabla ARP.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(arp -e || arp -a)</code></pre>
+</div>
+<!-- Code-->

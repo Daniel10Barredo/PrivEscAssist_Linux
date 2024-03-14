@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta author="Daniel Diez Barredo">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/PrivEscAssist_Linux/favicon.png">
+    <title>Asistente para escalada de privilegios en Linux</title>
+    <meta description="Guía de asistencia a la escalada de privilegios en sistemas Linux orientada a la metodología OSCP. Ofrece una guía basada en checklist con explicaciones detalladas de cada paso a seguir.">
+    <meta keywords="Escalada de privilegios, linux">
+    <!-- Scripts -->
+    <script src="js/jquery-3.7.0.min.js"></script>
+    <script src="js/jquery.cookie.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/rainbow-custom.min.js"></script>
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/glitch.css">
+    <link rel="stylesheet" href="css/obsidian.css">
+    <link rel="stylesheet" href="css/fontCustom.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- Cargador inicial web -->
+    <section id="preloader" class="dan_preloader">
+        <div id="spinner" class="dan_spinner">
+            <span class="spinner-rotate"></span> 
+        </div>
+    </section>
+
+    <!-- Cuerpo principal de contenido-->
+    <section class="ms-0 me-0" id="main">
+
+        <div class="row m-auto" style="max-width:1300px">
+    
+        <!-- Secc izquierda -->
+        <nav class="navbar navbar-dark col-12 col-md-3 h-100" id="navIzquierda">
+            <span class="os-logo d-md-block d-none">
+                <img src="./media/imag/linux.svg" class="icon_linux">
+            </span>
+            <!-- Logo -->
+            <div class="col-md-12 col-9" id="logo">
+                <a href="/PrivEscAssist_Linux/">
+                    <div id="logo_icon" class="bi bi-bug me-2 bug_custom"></div> PrivEscAssist<span id="logo_bar">|</span>Lin
+                </a>
+            </div>
+            <!-- Secciones y subsecciones -->
+            <button class="navbar-toggler d-md-none col-2 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse dont-collapse-sm text-light navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="me-1 fs-5">◍</span> <span class="sub-tog sub-tog-down"> Enumeración </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#enum/sistema" class="internal_link nav-subitem"><input type="checkbox"/> Sistema</div></li>
+                            <li><div href="#enum/usuarios" class="internal_link nav-subitem"><input type="checkbox"/></i> Usuarios/Grupos</div></li>
+                            <li><div href="#enum/programas" class="internal_link nav-subitem"><input type="checkbox"/></i> Programas</div></li>
+                            <li><div href="#enum/protecciones" class="internal_link nav-subitem"><input type="checkbox"/></i> Protecciones</div></li>
+                            <li><div href="#enum/redes" class="internal_link nav-subitem"><input type="checkbox"/></i> Redes</div></li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">1</span><span class="sub-tog sub-tog-down">Usuario </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#users/sudoers" class="internal_link nav-subitem"><input type="checkbox"/> Sudoers</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">2</span><span class="sub-tog sub-tog-down">Grupos </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#groups/usergroups" class="internal_link nav-subitem"><input type="checkbox"/> Grupos del usuario</div>
+                                <div href="#groups/Admins" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Sudo/Admin/Root</div>
+                                <div href="#groups/Wheel" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Wheel</div>
+                                <div href="#groups/Shadow" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Shadow</div>
+                                <div href="#groups/Staff" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Staff</div>
+                                <div href="#groups/Disk" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Disk</div>
+                                <div href="#groups/Video" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Video</div>
+                                <div href="#groups/Docker" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Docker</div>
+                                <div href="#groups/LxcLxd" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Lxc/Lxd</div>
+                                <div href="#groups/Adm" class="internal_link nav-subsubitem"><i class="bi bi-node-plus me-2"></i>Adm</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">3</span><span class="sub-tog sub-tog-down">SUID & SGID </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#suid_guid/SUID_SGID" class="internal_link nav-subitem"><input type="checkbox"/>Binarios SUID & SGID</div></li>
+                            <li><div href="#suid_guid/Capabilities" class="internal_link nav-subitem"><input type="checkbox"/></i>Capabilities</div></li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">4</span><span class="sub-tog sub-tog-down">Tareas Programadas </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#crontabs/Crontabs" class="internal_link nav-subitem"><input type="checkbox"/> Crontabs</div></li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">5</span><span class="sub-tog sub-tog-down">Ficheros </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#ficheros/Credenciales" class="internal_link nav-subitem"><input type="checkbox"/> Ficheros con Credenciales</div></li>
+                            <li><div href="#ficheros/Interesantes" class="internal_link nav-subitem"><input type="checkbox"/></i> Ficheros Interesantes</div></li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">6</span><span class="sub-tog sub-tog-down">Sistema Operativo </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#os/KernelExploits" class="internal_link nav-subitem"><input type="checkbox"/> Exploits de kernel</div></li>
+                        </ul>
+                    </li>
+                    <li class='nav-item sub-menu'><div class="submenu-custom"><span class="nav-numero">7</span><span class="sub-tog sub-tog-down">Otros </span><div class='fa fa-caret-down right'></div></div>
+                        <ul>
+                            <li><div href="#others/Bruteforce" class="internal_link nav-subitem"><input type="checkbox"/>Fuerza Bruta</div></li>
+                            <li><div href="#others/Sessions" class="internal_link nav-subitem"><input type="checkbox"/>Hijacking de Sesiones</div></li>
+                            <li><div href="#others/SharedObject" class="internal_link nav-subitem"><input type="checkbox"/>Hijacking de librerías</div></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Secc derecha -->
+        <div id="mainRight" class="col-12 col-md-9 p-0 ps-md-3">
+
+            <!-- Home -->
+            <div id="homeNav" class="col-12"><i class="bi bi-house pe-1"></i>- <span id="hntext">Escalada De Privilegios En Linux</span></div>
+
+            <!-- Contenido principal -->
+            <div id="mainContent">
+                
+                <h1 id="introTextMain" class="text-center">Escalada de Privilegios En Linux</h1>
+                <p class="text-center">
+                    <b>
+                    Guía de escalada de privilegios en Linux basada en la metodología OSCP. <br>
+                    Ofrece una guía basada en checklist con explicaciones detalladas de cada paso a seguir.
+                    </b>
+                </p>
+                <div class="text-center">
+                    <img id="mainImag" class="img img-fluid mainImag col-12 col-md-4" src="./media/imag/nosignal.jpg">
+                </div>
+                <br>
+                <p class="text-center">
+                    Además he desarrollado un pequeño script en powershell implementando todos los pasos de esta metodología que ha sido de gran ayuda para el OSCP <br>
+                    <br>
+                    <b>
+                        <a href="https://github.com/Daniel10Barredo/OSCP_AuxReconTools" target="_blank" class="green-link-github fs-5"><i class="bi bi-github"></i> AuxReconTools OSCP</a>
+                    </b>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </section>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="modalInfo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header modal-header-custom">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="modal_info" class="modal-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer class="footer text-center text-md-end pe-0 pe-md-5">
+        <a href="https://www.linkedin.com/in/daniel-diez-barredo-973279292/" target="_blank">Daniel Diez Barredo</a> | © 2024
+    </footer>
+    
+    <script src="js/main.js"></script>
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-94DPV11LB6"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-94DPV11LB6');
+    </script>
+
+</body>
+</html>

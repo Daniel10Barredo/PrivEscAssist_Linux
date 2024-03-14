@@ -1,0 +1,22 @@
+<h1>Grupo Shadow</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo shadow está asociado al conjunto de archivos que almacenan información sensible sobre las contraseñas de los usuarios, como los hashes y otros 
+    datos de autenticación.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Un atacante podría aprovechar los permisos de lectura sobre el archivo <b>/etc/shadow</b>, donde se guardan los hashes de las contraseñas de todos los usuarios, 
+    e intentar un ataque de fuerza bruta contra estos para tratar de recuperarlas.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Recoges los hashes
+cat /etc/shadow
+#Para realizar el cracking
+hashcat -m 1800 shadow rockyou.txt
+</code></pre>
+</div>
+<!-- Code-->

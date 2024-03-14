@@ -1,0 +1,67 @@
+<h1>Capabilities</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    Las capacidades en Linux son atributos especiales que se pueden asignar a procesos, binarios, servicios y usuarios para otorgarles 
+    privilegios específicos que normalmente estarían reservados para el usuario root. Estos privilegios podrían incluir la capacidad de 
+    interceptar tráfico de red o montar/desmontar sistemas de archivos.
+</p>
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Existen algunos archivos por defecto que utilizan esta configuración especial, pero si un usuario modifica estas configuraciones erróneamente, 
+    podría permitir a un atacante realizar una escalada de privilegios. Las siguientes capacidades son peligrosas y debemos prestarles especial atención:
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SETUID:</b> Permite establecer el ID de usuario efectivo en el ID de usuario real. Es uno de los más interesantes y 
+    deberemos aplicar técnicas similares a las vistas en la sección <span href="#suid_guid/SUID_SGID" class="internal_link text-success">SUID & GUID</span>.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SETGID:</b> Permite establecer el ID de grupo efectivo en el ID de grupo real. Es uno de los más interesantes y deberemos 
+    aplicar técnicas similares a las vistas en la sección <span href="#suid_guid/SUID_SGID" class="internal_link text-success">SUID & GUID</span>.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_CHOWN:</b> Permite cambiar el propietario y el grupo de cualquier archivo en el sistema.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_DAC_OVERRIDE:</b> Permite ignorar los permisos de acceso a archivos y realizar operaciones de lectura, escritura y ejecución 
+    en cualquier archivo.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_DAC_READ_SEARCH:</b> Permite leer y buscar cualquier archivo en el sistema, incluso si los permisos de lectura o búsqueda no 
+    están concedidos al usuario.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_NET_RAW:</b> Permite utilizar sockets de red de manera directa, lo que podría permitir realizar acciones de red maliciosas o 
+    no autorizadas.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SYS_ADMIN:</b> Concede una amplia variedad de capacidades de administración del sistema, como montar sistemas de archivos, 
+    cargar y descargar módulos de kernel, y realizar operaciones de administración de red.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SYS_PTRACE:</b> Permite rastrear y manipular los procesos de otros usuarios, lo que podría ser utilizado para obtener información 
+    confidencial o realizar ataques.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SYS_MODULE:</b> Permite cargar y descargar módulos de kernel en el sistema, lo que puede ser explotado para cargar módulos maliciosos 
+    o modificar el comportamiento del kernel.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_FOWNER:</b> Permite ignorar los permisos de propiedad de archivo y realizar operaciones de cambio de propiedad en cualquier archivo.
+</p>
+<p class="mainText">
+    <b class="text-light">▪ CAP_SETFCAP:</b> Permite establecer atributos de archivo extendidos, lo que podría utilizarse para modificar atributos críticos de seguridad 
+    de archivos.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Comprobación</h2>
+<p class="mainText">
+    Para identificar todos los binarios que tienen capacidades, utilizaremos el siguiente comando:
+</p>
+<!-- Code snippet-->
+<div class="snippet_custom position-relative">
+<pre class="code_snippet"><code data-language="shell">getcap -r / 2>/dev/null
+</code></pre>
+</div>

@@ -1,0 +1,34 @@
+<h1>Hijacking de Sesiones</h1>
+
+<p class="mainText">
+    En versiones antiguas, era posible abusar de los permisos débiles de las aplicaciones como <b>screen</b> y <b>tmux</b>, 
+    lo que permitía realizar el hijacking de sesiones iniciadas por otros usuarios.
+</p>
+
+
+<p class="mainText">
+    Para realizar esta operación con <b>screen</b>:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Listar las sesiones disponibles
+screen -ls
+#Conectarse a la sesión
+screen -dr [session]
+</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainText">
+    Para realizar esta operación con <b>tmux</b>:
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Sessiones de tmux
+tmux ls
+#Conectarse a la sesión
+tmux attach -t myname
+tmux -S /tmp/dev_sess attach -t 0
+</code></pre>
+</div>
+<!-- Code-->

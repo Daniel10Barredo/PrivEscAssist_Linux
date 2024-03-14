@@ -1,0 +1,22 @@
+<h1>Grupo Wheel</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    Este grupo está asociado con la capacidad de ejecutar comandos con privilegios de superusuario con el comando <b>su</b> (switch user) en sistemas Unix/Linux. 
+    Tradicionalmente, el grupo "wheel" se utiliza para conceder privilegios de superusuario a ciertos usuarios, permitiéndoles cambiar a la cuenta de root.
+</p>
+<p class="mainComment">
+    Es importante señalar que para la elevación generalmente necesitarás saber la clave de tu propio usuario.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    La escalada de privilegios es por lo general la más sencilla de todas, ya que en la configuración por defecto de Linux, el grupo wheel suelen tener directamente 
+    la habilidad de elevar privilegios directamente con el uso del siguiente comando.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">sudo su
+</code></pre>
+</div>
+<!-- Code-->

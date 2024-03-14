@@ -1,0 +1,144 @@
+<h1>Ficheros Con Credenciales</h1>
+
+<p class="mainText">
+    En este punto, debemos comprobar el sistema de ficheros en búsqueda de potenciales credenciales dentro del sistema o información útil para 
+    realizar una escalada de privilegios. Para ello, revisaremos comúnmente los siguientes directorios:
+</p>
+
+<h2>/home/</h2>
+<p class="mainText">
+    En el directorio <b>/home</b>, encontramos los ficheros de los usuarios, donde podemos buscar ficheros interesantes como claves SSH, 
+    historiales de comandos o bases de datos.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find /home -type f \( -name "*_history" -o -name "id_rsa" -o -name ".git-credentials" -o -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' -o -name "Dockerfile" -o -name "docker-compose.yml" \) 2>/dev/null</code></pre>
+</div>
+<!-- Code-->
+<p class="mainText">
+    Además, sería recomendable realizar búsquedas generales por nombre y contenido de la palabra "passwd".
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Para buscar por nombre
+find /home -exec ls -lad $PWD/* "{}" 2>/dev/null \; | grep -i -I "passw\|pwd"
+#Para buscar por contenido
+grep --color=auto -rnw /home -iIe "PASSW\|PASSWD\|PASSWORD\|PWD" --color=always 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2>/etc/</h2>
+<p class="mainText">
+<b class="text-light">▪ passwd:</b> generalmente no encontraremos el hash de la contraseña en este fichero, aunque es recomendable comprobarlo siempre.
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep -v '^[^:]*:[x\*]' /etc/passwd /etc/pwd.db /etc/master.passwd /etc/group 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+<b class="text-light">▪ shadow:</b> contiene los hashes y no deberíamos poder leerlo. También deberíamos comprobar el acceso a posibles copias o versiones del mismo..<br>
+<b class="text-light">▪ sudoers:</b> contiene los permisos y no deberíamos poder leerlo. También deberíamos comprobar el acceso a posibles copias o versiones del mismo.
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db /etc/security/opasswd /etc/sudoers 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+</p>
+
+
+<h2>/var/www/</h2>
+<p class="mainText">
+    Este directorio es comúnmente utilizado en sistemas Linux para almacenar ficheros y datos relacionados con sitios web. Los ficheros más interesantes 
+    suelen ser los ficheros de configuración para la base de datos.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep --color=auto -rnw /var/www/ -iIe "PASSW\|PASSWD\|PASSWORD\|PWD" --color=always | grep -v ".js" 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+<p class="mainText">
+    Una vez encontradas las credenciales para la base de datos deberíamos probarlas en todos los servicios y usuarios del sistema incluyendo el root y deberíamos también 
+    tratar de entrar a la base de datos en búsqueda de más credenciales que puedan estar almacenadas.
+</p>
+<p class="mainText">
+    También es interesante buscar otros archivos como ficheros de configuración del servidor como .htpasswd o ficheros con información txt, bash, zip, etc. que podrían 
+    contener información interesante. 
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find /var/www/ -type f \( -name "*.txt" -o -name "*.sh" -o -name "*.zip" -o -name "*.7z" -o -name "*.gz" -o -name "*.tar.gz" -o -name "*.htpasswd" \) 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2>/var/backups/</h2>
+<p class="mainText">
+    En este directorio se realizan copias de seguridad de forma automatizada y pueden existir algunos ficheros con permisos mal configurados. Deberemos comprobar si tenemos 
+    acceso a alguna información sensible dentro de este directorio.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">ls -la /var/backups/
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2>/var/mail/ /var/spool/mail/</h2>
+<p class="mainText">
+    Estos directorios son utilizados para almacenar los buzones de correo de los usuarios locales. Por norma general, sólo debería ser legible el correspondiente al propio 
+    usuario, pero es recomendable comprobarlo ya que se guarda información sensible que podría quedar expuesta con una mala configuración.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">ls -la /var/mail/
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2>/var/log/</h2>
+<p class="mainText">
+    Este es el directorio estándar donde se almacenan los logs generados por los diversos programas y servicios del sistema. Por norma general, se necesitan permisos 
+    especiales para poder leer los registros, pero si existe algún problema de configuración, se pueden realizar búsquedas por palabras clave para exponer datos sensibles.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep -RE 'comm="su"|comm="sudo"' /var/log* 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2>Otros directorios</h2>
+<p class="mainText">
+<b class="text-light">▪ /tmp /var/tmp:</b> Directorios de ficheros temporales donde en algunas ocasiones los usuarios pueden guardar ficheros temporales que luego olvidan 
+eliminar o con permisos mal configurados..<br>
+<b class="text-light">▪ /opt:</b> Directorio que contiene software adicional instalado como scripts del usuario o aplicaciones de terceros que pueden no tener toda la 
+seguridad que tienen los binarios del sistema por defecto.<br>
+<b class="text-light">▪ Otros directorios no estándar en la raíz.</b> 
+</p>
+
+
+<h2>Búsqueda general</h2>
+<p class="mainText">
+    <b class="text-light">Buscar por nombre passwd:</b>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find . -exec ls -lad $PWD/* "{}" 2>/dev/null \; | grep -i -I "passw\|pwd"
+</code></pre>
+</div>
+<!-- Code-->
+    <b class="text-light">Buscar por contenido:</b>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep --color=auto -rnw -iIe "PASSW\|PASSWD\|PASSWORD\|PWD" --color=always 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+</p>

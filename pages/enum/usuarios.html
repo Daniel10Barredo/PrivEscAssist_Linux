@@ -1,0 +1,41 @@
+<h1>Usuarios del sistema</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Enumeración de usuarios</h2>
+<p class="mainComment">Enumeración de usuarios en el sistema con shell interactiva.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">cat /etc/passwd | grep "sh$"</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Enumeración de usuarios y grupos a los que pertenece.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">echo; while IFS=: read -r username _ uid _ _ hom term; do echo "   [>] $username \tHome: $hom \tTerm: $term"; echo "         Groups:";echo -n "       " ;groups $username | cut -d ' ' -f3- | xargs -n1 echo -n " ";echo ""; done < <(cat /etc/passwd | grep "sh$")</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Información sobre sesiones de usuarios</h2>
+<p class="mainComment">Muestra los usuarios actualmente logeados en el sistema.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">w</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Musetra las últimas sesiones activas.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell"></code>last | tail</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Información sobre grupos del sistema</h2>
+<p class="mainComment">Obtener una lista de grupos y miembros de cada grupo.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for group in $(cut -d: -f1 /etc/group); do members=$(getent group $group | cut -d: -f4); echo " - $group : $members"; done</code></pre>
+</div>
+<!-- Code-->
+

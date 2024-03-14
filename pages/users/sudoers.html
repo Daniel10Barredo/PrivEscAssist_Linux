@@ -1,0 +1,59 @@
+<h1>Sudoers</h1>
+
+<p>
+    En el proceso de escalada de privilegios, el primer paso debería ser verificar los permisos asignados al usuario en el archivo sudoers. 
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    El fichero <b>/etc/sudoers</b> contiene la configuración de seguridad en sistemas basados en Unix que define qué usuarios pueden ejecutar qué comandos con privilegios 
+    de root mediante el comando sudo. Este fichero tiene limitados los permisos de lectura al usuario root, aunque si el usuario está presente en la configuración 
+    puede llegar a listar los comandos que le están permitidos.
+</p>
+<p class="mainText">
+    Es interesante además para un atacante comprender la sintaxis de la configuración y las posibles vulnerabilidades que podrían llevar a una potencial escalada de privilegios.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Comprobación</h2>
+<p class="mainComment">Utiliza el siguiente comando para comprobar los privilegios <b><i>(es posible que necesites las credenciales del usuario para poder verlo)</i></b>.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">sudo -l</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+Con los resultados del comando anterior, hay varios aspectos a los que debemos prestar atención para identificar posibles vectores de escalada de privilegios:
+</p>
+
+<h3>◍ Binarios del sistema para la elevación</h3>
+<p class="mainText ps-2">
+    Verificar si el binario que se va a ejecutar es un binario estándar que podría ser aprovechado para obtener 
+    privilegios elevados. GTFOBins
+    <a class="linksref" target="_blank" href="https://gtfobins.github.io/">
+        <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+    proporciona una lista detallada de estos binarios comunes y sus potenciales usos en escalada de privilegios.
+</p>
+
+<h3>◍ Permisos mal configurados</h3>
+<p class="mainText ps-2">
+    Revisar los permisos del binario y del directorio que lo contiene, para determinar si pueden ser manipulados por el 
+    usuario y lograr así la ejecución de código arbitrario con privilegios elevados.
+</p>
+
+<h3>◍ Variable PATH de sudoers</h3>
+<p class="mainText ps-2">
+    Analizar la variable <b>PATH</b> utilizada en sudoers y verificar si es posible realizar modificaciones en alguno de los 
+    directorios presentes en PATH. Esto podría permitir implantar un binario malicioso y conseguir la ejecución de código arbitrario con privilegios elevados.
+</p>
+
+<h3>◍ Modificadores ENV_KEEP y SETENV</h3>
+<p class="mainText ps-2">
+    Sudo normalmente limpia las variables de entorno del usuario, pero en ocasiones por ejemplo con el uso de ENV_KEEP es posible 
+    especificar que variables de entorno se mantendrán. Otro parámetro interesante a tener en cuenta podría ser SETENV que permite al usuario conservar con -E todas la variables 
+    de entorno al ejecutar sudo. Estos modificadores permiten realizar ataques como la modificación de PYTHONPATH o incluso forzar la carga de librerías con (LD_PRELOAD & LD_LIBRARY_PATH) 
+    para ejecutar código malicioso facilmente.
+</p>

@@ -1,0 +1,49 @@
+<h1>Información sobre el sistema</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Información del sistema</h2>
+<p class="mainComment">Información sobre el sistema operativo y la versión del kernel utilizado.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">uname -a</code></pre>
+</div>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Unidades de almacenamiento</h2>
+<p class="mainComment">Enumeración de las particiones y porcentaje de uso.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(df -h || lsblk)</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Lista de particiones montadas durante el arranque.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell"></code>cat /etc/fstab</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Variables de entorno</h2>
+<p class="mainComment">Enumeración de las diferentes variables de entorno. En ocasiones es posible encontrar información interesante sobre el sistema o incluso credenciales.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">env</code></pre>
+</div>
+<!-- Code-->
+
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Otros</h2>
+<p class="mainComment">Información sobre los dispositivos PCI conectados al sistema.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">lspci</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Información sobre los dispositivos USB conectados al sistema.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">lsusb</code></pre>
+</div>
+<!-- Code-->
+

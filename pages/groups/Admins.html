@@ -1,0 +1,36 @@
+<h1>Grupo Sudo/Admin</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Explicación</h2>
+<p class="mainText">
+    Este grupo está asociado con el comando sudo, que permite a los usuarios ejecutar comandos con privilegios elevados. Un atacante podría intentar añadirse 
+    a este grupo o abusar de los permisos concedidos a los miembros del grupo para obtener acceso a funciones sensibles del sistema.
+</p>
+<p class="mainText">
+    Es importante señalar que para la elevación generalmente necesitarás saber la clave de tu propio usuario.
+</p>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Ataque</h2>
+<p class="mainText">
+    La escalada de privilegios es por lo general la más sencilla de todas, ya que en la configuración por defecto de Linux, el grupo sudo y admin suelen tener directamente 
+    la habilidad de elevar privilegios directamente con el uso del siguiente comando.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">sudo su
+</code></pre>
+</div>
+<!-- Code-->
+
+
+<p class="mainText">
+    En el caso de que se haya modificado la configuración por defecto, también se podría utilizar pkexec para ejecutar cualquier cosa como root porque estos grupos entran 
+    dentro de la política por defecto que puede usar esta herramienta.
+</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">pkexec "/bin/sh"
+</code></pre>
+</div>
+<!-- Code-->
+
+

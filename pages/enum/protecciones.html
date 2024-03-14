@@ -1,0 +1,42 @@
+<h1>Protecciones del sistema</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>SELinux</h2>
+<p class="mainComment">Comprobación de presencia de SELinux.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(sestatus 2>/dev/null | echo "Not found SELinux")</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>AppArmor</h2>
+<p class="mainComment">Comprobar presencia de AppArmor.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">if [ `which aa-status 2>/dev/null` ]; then aa-status; elif [ `which apparmor_status 2>/dev/null` ]; then apparmor_status; elif [ `ls -d /etc/apparmor* 2>/dev/null` ]; then ls -d /etc/apparmor*; else echo "Not found AppArmor"; fi</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>ASLR</h2>
+<p class="mainComment">Nivel de protección de reandomizado de memoria.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">cat /proc/sys/kernel/randomize_va_space 2>/dev/null</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>PaX</h2>
+<p class="mainComment">Protección contra desbordamiento del buffer.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(which paxctl-ng paxctl >/dev/null 2>&1 && echo "Yes" || echo "Not found PaX")</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Execshield</h2>
+<p class="mainComment">Protección para ejecución de código en stack de Execshield.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(grep "exec-shield" /etc/sysctl.conf || echo "Not found Execshield")</code></pre>
+</div>
+<!-- Code-->
+

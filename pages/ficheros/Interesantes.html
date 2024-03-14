@@ -1,0 +1,89 @@
+<h1>Ficheros Interesantes</h1>
+
+<p class="mainText">
+    Es una buena práctica revisar los permisos y características no estándar dentro de la máquina, ya que pueden señalar vectores potenciales para obtener 
+    información sensible o incluso conseguir algún vector de escalada de privilegios.
+</p>
+
+<h2>Ficheros con permisos de escritura</h2>
+<p class="mainText">
+    Buscar ficheros que pertenecen al usuario pero que pueden ser escritos por cualquier usuario:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find / '(' -type f -or -type d ')' '(' '(' -user $USER ')' -or '(' -perm -o=w ')' ')' 2>/dev/null | grep -v '/proc/' | grep -v $HOME | sort | uniq
+</code></pre>
+</div>
+<!-- Code-->
+    Buscar ficheros escribibles por cualquier grupo del usuario:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for g in $(groups); do find \( -type f -or -type d \) -group $g -perm -g=w 2>/dev/null | grep -v '/proc/' | grep -v $HOME; done
+</code></pre>
+</div>
+<!-- Code-->
+</p>
+
+<h2>Ficheros con permisos extraños</h2>
+<p class="mainText">
+    Ficheros de root en home:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find /home -user root 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+    Ficheros de otros usuarios en mis directorios:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for d in $(find /var /etc /home /root /tmp /usr /opt /boot /sys -type d -user $(whoami) 2>/dev/null); do find $d ! -user $(whoami) -exec ls -l {} \; 2>/dev/null; done
+</code></pre>
+</div>
+<!-- Code-->
+    Ficheros de root solo legibles por el usuario:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find / -type f -user root ! -perm -o=r 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+    Ficheros que pertenecen al usuario o pueden ser escritos por todos:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find / '(' -type f -or -type d ')' '(' '(' -user $USER ')' -or '(' -perm -o=w ')' ')' ! -path "/proc/*" ! -path "/sys/*" ! -path "$HOME/*" 2>/dev/null 
+</code></pre>
+</div>
+<!-- Code-->
+    Ficheros modificables por el grupo al que pertenece el usuario:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for g in $(groups); do printf "Group $g:\n"; find / '(' -type f -or -type d ')' -group $g -perm -g=w ! -path "/proc/*" ! -path "/sys/*" ! -path "$HOME/*" 2>/dev/null; done
+</code></pre>
+</div>
+<!-- Code-->
+</p>
+
+
+<h2>Ficheros recientes</h2>
+<p class="mainText">
+    Ficheros modificados en los últimos 15 minutos:
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">find / -type f -mmin -15 ! -path "/proc/*" ! -path "/sys/*" ! -path "/run/*" ! -path "/dev/*" ! -path "/var/lib/*" 2>/dev/null
+</code></pre>
+</div>
+<!-- Code-->
+</p>
+
+
+<h2>Ficheros sospechosos</h2>
+<p class="mainText">
+    Cuando un fichero es colocado por un gestor de paquetes, los últimos números de timestamp son cero y si se modifica manualmente, este cambia a un timestamp real. 
+    Se puede entonces filtrar para buscar ficheros manipulados que no deberían estar en el PATH.
+</p>
+<!-- Code-->
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">for i in $(echo $PATH | tr ":" "\n"); do find $i -type f -exec ls -lda --time-style=full {} \; 2>/dev/null | grep -v "000000\|->";done
+</code></pre>
+</div>
+<!-- Code-->

@@ -1,0 +1,32 @@
+<h1>Programas instalados</h1>
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Programas instalados</h2>
+<p class="mainComment">Listar el woftware instalado en el sistema y descripción.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">(dpkg -l || rpm -qa)</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Listar los 100 últimos paquetes instalados en el sistema.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">grep " install " /var/log/dpkg.log* | sed 's/^[^:]*://g' | sort | tail -n100</code></pre>
+</div>
+<!-- Code-->
+
+<h2><i class="bi bi-check-circle me-2"></i></i>Procesos</h2>
+<p class="mainComment">Enumeración de procesos en el sistema en forma de forest.</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">ps -auxfwww</code></pre>
+</div>
+<!-- Code-->
+
+<p class="mainComment">Visualizado de procesos mejorada (interactiva).</p>
+<!-- Code snipet-->
+<div class="snipet_custom position-relative">
+<pre class="code_snipet"><code data-language="shell">top</code></pre>
+</div>
+<!-- Code-->
+
